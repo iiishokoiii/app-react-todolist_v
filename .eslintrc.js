@@ -83,6 +83,10 @@ module.exports = {
     ],
 
     // react
+    'react/function-component-definition': [
+      2,
+      { namedComponents: 'arrow-function' },
+    ],
     'react/jsx-filename-extension': [
       'error',
       {
@@ -95,12 +99,14 @@ module.exports = {
         custom: 'ignore',
       },
     ],
+    'jsx-a11y/control-has-associated-label': ['warn'],
+    'react/button-has-type': ['warn'],
     'react/prop-types': 'off',
     'react/prefer-stateless-function': 'off',
 
     // react hooks
     'react-hooks/rules-of-hooks': 'error',
-    'react-hooks/exhaustive-deps': 'error',
+    'react-hooks/exhaustive-deps': 'warn',
 
     // import
     'import/extensions': [
