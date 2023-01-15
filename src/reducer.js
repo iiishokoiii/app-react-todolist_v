@@ -43,10 +43,9 @@ export default function reducer(state = initialState, action) {
       };
     }
     case 'ADD_ITEM_SUCCESS': {
-      const newList = [...state.list, action.payload];
       return {
         ...state,
-        list: newList,
+        list: action.payload,
         addFlg: false,
       };
     }

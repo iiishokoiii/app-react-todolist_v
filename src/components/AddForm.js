@@ -12,15 +12,17 @@ export const AddForm = () => {
 
   const addItem = (newTitle, newId) => {
     const newItem = { id: newId, title: newTitle, checked: false };
+    const newList = [...list, newItem];
     return axios
-      .put(DB_URL + 'todo/' + newId + '.json', newItem)
-      .then(() => {
+      .put(`${DB_URL}todo.json`, newList)
+      .then((res) => {
         dispatch({
           type: 'ADD_ITEM_SUCCESS',
-          payload: newItem,
+          payload: res.data,
         });
       })
-      .catch(() => {
+      .catch((error) => {
+        console.log(error);
         dispatch({
           type: 'ADD_ITEM_CANCEL',
         });
@@ -33,13 +35,13 @@ export const AddForm = () => {
   };
 
   const [tmpText, updateTmpText] = useState('');
-  const [isNoText, setIsNoText] = useState(false);
+  const [errFlg, setErrFlg] = useState(false);
   const handleAddItem = () => {
     if (!tmpText) {
-      setIsNoText(true);
+      setErrFlg(true);
       return;
     }
-    const newId = Number(list.sort((a, b) => b.id - a.id)[0].id) + 1;
+    const newId = Number(list.sort((a, b) => b.id - a.id)[0].id) + 1; // 未使用のIDを設定
     addItem(tmpText, newId);
     updateTmpText('');
   };
@@ -62,9 +64,7 @@ export const AddForm = () => {
             Cancel
           </Button>
         </div>
-        {isNoText
-          ? '<p className="text-center mt-4">入力されていません</p>'
-          : ''}
+        {errFlg ? <p className="text-center mt-4">入力されていません</p> : ''}
       </Modal>
     </div>
   );

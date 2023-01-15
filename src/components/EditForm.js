@@ -19,10 +19,10 @@ export const EditForm = (props) => {
     });
     return axios
       .put(`${DB_URL}todo.json`, newList)
-      .then(() => {
+      .then((res) => {
         dispatch({
           type: 'EDIT_ITEM_SUCCESS',
-          payload: newList,
+          payload: res.data,
         });
       })
       .catch(() => {
