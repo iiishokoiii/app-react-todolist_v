@@ -14,10 +14,10 @@ export const DeleteForm = (props) => {
   const dispatch = useDispatch();
   const deleteItem = () => {
     const newList = list.filter((item) => item.id !== deleteId);
-    axios.put(`${DB_URL}todo.json`, newList).then(() => {
+    axios.put(`${DB_URL}todo.json`, newList).then((res) => {
       dispatch({
         type: 'DELETE_ITEM_SUCCESS',
-        payload: deleteId,
+        payload: res.data,
       });
     });
   };
