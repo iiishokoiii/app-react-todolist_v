@@ -11,8 +11,8 @@ import {
 import { AddForm } from './AddForm';
 import { EditForm } from './EditForm';
 import { DeleteForm } from './DeleteForm';
-import { Button } from './Button';
-import { IconButton } from './IconButton';
+import { Button } from './module/Button';
+import { IconButton } from './module/IconButton';
 import { DB_URL } from '../config';
 
 const List = () => {

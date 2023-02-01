@@ -2,8 +2,8 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { fetchListSuccessAction, updateDeleteFlgAction } from '../action';
-import { Button } from './Button';
-import { Modal } from './Modal';
+import { Button } from './module/Button';
+import { Modal } from './module/Modal';
 import { DB_URL } from '../config';
 
 export const DeleteForm = (props) => {

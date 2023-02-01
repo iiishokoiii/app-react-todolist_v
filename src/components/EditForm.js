@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { fetchListSuccessAction, updateEditFlgAction } from '../action';
-import { Button } from './Button';
-import { Modal } from './Modal';
-import { TextInput } from './TextInput';
+import { Button } from './module/Button';
+import { Modal } from './module/Modal';
+import { TextInput } from './module/TextInput';
 import { DB_URL } from '../config';
 
 export const EditForm = (props) => {
