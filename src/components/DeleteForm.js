@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
+import { fetchListSuccessAction, updateDeleteFlgAction } from '../action';
 import { Button } from './Button';
 import { Modal } from './Modal';
 import { DB_URL } from '../config';
@@ -15,16 +16,11 @@ export const DeleteForm = (props) => {
   const deleteItem = () => {
     const newList = list.filter((item) => item.id !== deleteId);
     axios.put(`${DB_URL}todo.json`, newList).then((res) => {
-      dispatch({
-        type: 'DELETE_ITEM_SUCCESS',
-        payload: res.data,
-      });
+      dispatch(fetchListSuccessAction(res.data));
     });
   };
   const cancelDeleteItem = () => {
-    dispatch({
-      type: 'EDELETE_ITEM_CANCEL',
-    });
+    dispatch(updateDeleteFlgAction(false));
   };
 
   return (

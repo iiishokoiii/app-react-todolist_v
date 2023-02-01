@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
+import {
+  fetchListAction,
+  fetchListSuccessAction,
+  updateEditFlgAction,
+  updateDeleteFlgAction,
+  updateAddFlgAction,
+} from '../action';
 import { AddForm } from './AddForm';
 import { EditForm } from './EditForm';
 import { DeleteForm } from './DeleteForm';
@@ -20,38 +27,26 @@ const List = () => {
   const [editId, setEditId] = useState(null);
 
   useEffect(() => {
-    dispatch({
-      type: 'FETCH_LIST',
-    });
+    dispatch(fetchListAction());
     axios.get(`${DB_URL}todo.json`).then((res) => {
-      console.log(res.data);
       const _arr = res.data.filter((item) => !!item);
-      dispatch({
-        type: 'FETCH_LIST_SUCCESS',
-        payload: _arr,
-      });
+      dispatch(fetchListSuccessAction(_arr));
     });
   }, []);
 
   const handleEditItem = (id) => {
     if (editFlg || deleteFlg) return;
     setEditId(id);
-    dispatch({
-      type: 'EDIT_ITEM',
-    });
+    dispatch(updateEditFlgAction(true));
   };
   const handleDeleteItem = (id) => {
     if (editFlg || deleteFlg) return;
     setDeleteId(id);
-    dispatch({
-      type: 'DELETE_ITEM',
-    });
+    dispatch(updateDeleteFlgAction(true));
   };
   const addItem = () => {
     if (editFlg) return;
-    dispatch({
-      type: 'ADD_ITEM',
-    });
+    dispatch(updateAddFlgAction(true));
   };
 
   const setStyle = (checked) =>

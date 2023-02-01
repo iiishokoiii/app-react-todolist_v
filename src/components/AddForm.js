@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
+import { fetchListSuccessAction, updateAddFlgAction } from '../action';
 import { Button } from './Button';
 import { Modal } from './Modal';
 import { TextInput } from './TextInput';
@@ -16,22 +17,14 @@ export const AddForm = () => {
     return axios
       .put(`${DB_URL}todo.json`, newList)
       .then((res) => {
-        dispatch({
-          type: 'ADD_ITEM_SUCCESS',
-          payload: res.data,
-        });
+        dispatch(fetchListSuccessAction(res.data));
       })
-      .catch((error) => {
-        console.log(error);
-        dispatch({
-          type: 'ADD_ITEM_CANCEL',
-        });
+      .catch(() => {
+        dispatch(updateAddFlgAction(false));
       });
   };
   const cancelAddItem = () => {
-    dispatch({
-      type: 'ADD_ITEM_CANCEL',
-    });
+    dispatch(updateAddFlgAction(false));
   };
 
   const [tmpText, updateTmpText] = useState('');

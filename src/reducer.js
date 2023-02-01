@@ -22,63 +22,24 @@ export default function reducer(state = initialState, action) {
         isLoading: false,
       };
     }
-    case 'EDIT_ITEM': {
+    case 'UPDATE_EDIT_FLG': {
       return {
         ...state,
-        editFlg: true,
+        editFlg: action.payload,
         // editIndex: action.payload,
       };
     }
-    case 'DELETE_ITEM': {
+    case 'UPDATE_DELETE_FLG': {
       return {
         ...state,
-        deleteFlg: true,
+        deleteFlg: action.payload,
         // editIndex: action.payload,
       };
     }
-    case 'ADD_ITEM': {
+    case 'UPDATE_ADD_FLG': {
       return {
         ...state,
-        addFlg: true,
-      };
-    }
-    case 'ADD_ITEM_SUCCESS': {
-      return {
-        ...state,
-        list: action.payload,
-        addFlg: false,
-      };
-    }
-    case 'EDIT_ITEM_SUCCESS': {
-      return {
-        ...state,
-        list: action.payload,
-        editFlg: false,
-      };
-    }
-    case 'DELETE_ITEM_SUCCESS': {
-      return {
-        ...state,
-        list: action.payload,
-        deleteFlg: false,
-      };
-    }
-    case 'ADD_ITEM_CANCEL': {
-      return {
-        ...state,
-        addFlg: false,
-      };
-    }
-    case 'EDIT_ITEM_CANCEL': {
-      return {
-        ...state,
-        editFlg: false,
-      };
-    }
-    case 'EDELETE_ITEM_CANCEL': {
-      return {
-        ...state,
-        deleteFlg: false,
+        addFlg: action.payload,
       };
     }
     default:
