@@ -17,6 +17,7 @@ export const DeleteForm = (props) => {
     const newList = list.filter((item) => item.id !== deleteId);
     axios.put(`${DB_URL}todo.json`, newList).then((res) => {
       dispatch(fetchListSuccessAction(res.data));
+      dispatch(updateDeleteFlgAction(false));
     });
   };
   const cancelDeleteItem = () => {

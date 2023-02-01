@@ -22,6 +22,7 @@ export const EditForm = (props) => {
       .put(`${DB_URL}todo.json`, newList)
       .then((res) => {
         dispatch(fetchListSuccessAction(res.data));
+        dispatch(updateEditFlgAction(false));
       })
       .catch(() => {
         dispatch(updateEditFlgAction(false));

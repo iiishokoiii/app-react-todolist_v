@@ -18,6 +18,7 @@ export const AddForm = () => {
       .put(`${DB_URL}todo.json`, newList)
       .then((res) => {
         dispatch(fetchListSuccessAction(res.data));
+        dispatch(updateAddFlgAction(false));
       })
       .catch(() => {
         dispatch(updateAddFlgAction(false));

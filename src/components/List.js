@@ -30,6 +30,7 @@ const List = () => {
     dispatch(fetchListAction());
     axios.get(`${DB_URL}todo.json`).then((res) => {
       const _arr = res.data.filter((item) => !!item);
+      console.log(_arr);
       dispatch(fetchListSuccessAction(_arr));
     });
   }, []);
