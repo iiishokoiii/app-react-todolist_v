@@ -12,6 +12,10 @@ export const EditForm = (props) => {
   const list = useSelector((state) => state.list);
   const targetItem = list.find((item) => item.id === editId);
 
+  const [tmpText, updateTmpText] = useState(targetItem.title);
+  const [errFlg, setErrFlg] = useState(false);
+  const [fetchErrFlg, setFetchErrFlg] = useState(false);
+
   const dispatch = useDispatch();
   const editItem = (itemTitle) => {
     const newItem = { ...targetItem, title: itemTitle };
@@ -25,15 +29,13 @@ export const EditForm = (props) => {
         dispatch(updateEditFlgAction(false));
       })
       .catch(() => {
-        dispatch(updateEditFlgAction(false));
+        setFetchErrFlg(true);
       });
   };
   const cancelEditItem = () => {
     dispatch(updateEditFlgAction(false));
   };
 
-  const [tmpText, updateTmpText] = useState(targetItem.title);
-  const [errFlg, setErrFlg] = useState(false);
   const handleEditItem = () => {
     if (!tmpText) {
       setErrFlg(true);
@@ -49,22 +51,39 @@ export const EditForm = (props) => {
         onCloseModal={cancelEditItem}
         title={`'${targetItem.title}'の編集`}
       >
-        <TextInput
-          defaultValue={tmpText}
-          onChange={(e) => {
-            updateTmpText(e.currentTarget.value);
-          }}
-          onSubmit={handleEditItem}
-        />
-        <div className="flex justify-center items-start mt-4">
-          <Button onClick={handleEditItem} clazz="-primary">
-            OK
-          </Button>
-          <Button onClick={cancelEditItem} clazz="-normal">
-            Cancel
-          </Button>
-        </div>
-        {errFlg ? <p className="text-center mt-4">入力されていません</p> : ''}
+        {!fetchErrFlg ? (
+          <div>
+            <TextInput
+              defaultValue={tmpText}
+              onChange={(e) => {
+                updateTmpText(e.currentTarget.value);
+              }}
+              onSubmit={handleEditItem}
+            />
+            <div className="flex justify-center items-start mt-4">
+              <Button onClick={handleEditItem} clazz="-primary">
+                OK
+              </Button>
+              <Button onClick={cancelEditItem} clazz="-normal">
+                Cancel
+              </Button>
+            </div>
+            {errFlg && <p className="text-center mt-4">入力されていません</p>}
+          </div>
+        ) : (
+          <div>
+            <p className="text-center mt-4">
+              通信エラーです
+              <br />
+              しばらく待ってお試しください
+            </p>
+            <div className="flex justify-center mt-4">
+              <Button onClick={cancelEditItem} clazz="-OK">
+                OK
+              </Button>
+            </div>
+          </div>
+        )}
       </Modal>
     </div>
   );
