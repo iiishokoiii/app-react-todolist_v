@@ -1,37 +1,41 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
-import { Button } from './Button';
-import { Modal } from './Modal';
-import { TextInput } from './TextInput';
+import { fetchListSuccessAction, updateAddFlgAction } from '../action';
+import { Button } from './module/Button';
+import { Modal } from './module/Modal';
+import { TextInput } from './module/TextInput';
 import { DB_URL } from '../config';
+import { geteDateStr } from '../utility';
 
 export const AddForm = () => {
   const dispatch = useDispatch();
   const list = useSelector((state) => state.list);
 
   const addItem = (newTitle, newId) => {
-    const newItem = { id: newId, title: newTitle, checked: false };
-    const newList = [...list, newItem];
+    const newItem = {
+      id: newId,
+      title: newTitle,
+      checked: false,
+      date: geteDateStr(),
+    };
+    const newList = [...list, newItem].sort((a, b) => {
+      const dateA = new Date(a.date);
+      const dateB = new Date(b.date);
+      return dateB.getTime() - dateA.getTime();
+    });
     return axios
       .put(`${DB_URL}todo.json`, newList)
       .then((res) => {
-        dispatch({
-          type: 'ADD_ITEM_SUCCESS',
-          payload: res.data,
-        });
+        dispatch(fetchListSuccessAction(res.data));
+        dispatch(updateAddFlgAction(false));
       })
-      .catch((error) => {
-        console.log(error);
-        dispatch({
-          type: 'ADD_ITEM_CANCEL',
-        });
+      .catch(() => {
+        dispatch(updateAddFlgAction(false));
       });
   };
   const cancelAddItem = () => {
-    dispatch({
-      type: 'ADD_ITEM_CANCEL',
-    });
+    dispatch(updateAddFlgAction(false));
   };
 
   const [tmpText, updateTmpText] = useState('');

@@ -1,12 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
+import {
+  fetchListAction,
+  fetchListSuccessAction,
+  updateEditFlgAction,
+  updateDeleteFlgAction,
+  updateAddFlgAction,
+} from '../action';
 import { AddForm } from './AddForm';
 import { EditForm } from './EditForm';
 import { DeleteForm } from './DeleteForm';
-import { Button } from './Button';
-import { IconButton } from './IconButton';
+import { Button } from './module/Button';
+import { IconButton } from './module/IconButton';
 import { DB_URL } from '../config';
+import { convertDateStr } from '../utility';
 
 const List = () => {
   const list = useSelector((state) => state.list);
@@ -20,38 +28,33 @@ const List = () => {
   const [editId, setEditId] = useState(null);
 
   useEffect(() => {
-    dispatch({
-      type: 'FETCH_LIST',
-    });
+    dispatch(fetchListAction());
     axios.get(`${DB_URL}todo.json`).then((res) => {
-      console.log(res.data);
-      const _arr = res.data.filter((item) => !!item);
-      dispatch({
-        type: 'FETCH_LIST_SUCCESS',
-        payload: _arr,
-      });
+      console.log(res);
+      const _arr = res.data
+        .filter((item) => !!item)
+        .sort((a, b) => {
+          const dateA = new Date(a.date);
+          const dateB = new Date(b.date);
+          return dateB.getTime() - dateA.getTime();
+        });
+      dispatch(fetchListSuccessAction(_arr));
     });
   }, []);
 
   const handleEditItem = (id) => {
     if (editFlg || deleteFlg) return;
     setEditId(id);
-    dispatch({
-      type: 'EDIT_ITEM',
-    });
+    dispatch(updateEditFlgAction(true));
   };
   const handleDeleteItem = (id) => {
     if (editFlg || deleteFlg) return;
     setDeleteId(id);
-    dispatch({
-      type: 'DELETE_ITEM',
-    });
+    dispatch(updateDeleteFlgAction(true));
   };
   const addItem = () => {
     if (editFlg) return;
-    dispatch({
-      type: 'ADD_ITEM',
-    });
+    dispatch(updateAddFlgAction(true));
   };
 
   const setStyle = (checked) =>
@@ -74,7 +77,10 @@ const List = () => {
                   item.checked,
                 )}`}
               >
-                {item.title}
+                <p>{item.title}</p>
+                <p className="text-gray-400 text-s">
+                  {convertDateStr(item.date)}
+                </p>
               </div>
               <div className="flex w-1/10 items-center">
                 <Button

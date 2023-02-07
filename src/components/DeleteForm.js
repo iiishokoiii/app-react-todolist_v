@@ -1,30 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
-import { Button } from './Button';
-import { Modal } from './Modal';
+import { fetchListSuccessAction, updateDeleteFlgAction } from '../action';
+import { Button } from './module/Button';
+import { Modal } from './module/Modal';
 import { DB_URL } from '../config';
 
 export const DeleteForm = (props) => {
   const { deleteId } = props;
   const list = useSelector((state) => state.list);
   const targetItem = list.find((item) => item.id === deleteId);
-  // const deleteIndex = useSelector(state => state.deleteIndex);
+
+  const [fetchErrFlg, setFetchErrFlg] = useState(false);
 
   const dispatch = useDispatch();
   const deleteItem = () => {
     const newList = list.filter((item) => item.id !== deleteId);
-    axios.put(`${DB_URL}todo.json`, newList).then((res) => {
-      dispatch({
-        type: 'DELETE_ITEM_SUCCESS',
-        payload: res.data,
+    axios
+      .put(`${DB_URL}todo.json`, newList)
+      .then((res) => {
+        dispatch(fetchListSuccessAction(res.data));
+        dispatch(updateDeleteFlgAction(false));
+      })
+      .catch(() => {
+        setFetchErrFlg(true);
       });
-    });
   };
   const cancelDeleteItem = () => {
-    dispatch({
-      type: 'EDELETE_ITEM_CANCEL',
-    });
+    dispatch(updateDeleteFlgAction(false));
   };
 
   return (
@@ -33,15 +36,32 @@ export const DeleteForm = (props) => {
         onCloseModal={cancelDeleteItem}
         title={`'${targetItem.title}’の削除`}
       >
-        <p className="text-sm text-center mt-4">削除しますか？</p>
-        <div className="flex justify-center items-start mt-10">
-          <Button onClick={deleteItem} clazz="-primary">
-            OK
-          </Button>
-          <Button onClick={cancelDeleteItem} clazz="-normal">
-            Cancel
-          </Button>
-        </div>
+        {!fetchErrFlg ? (
+          <div>
+            <p className="text-sm text-center mt-4">削除しますか？</p>
+            <div className="flex justify-center items-start mt-10">
+              <Button onClick={deleteItem} clazz="-primary">
+                OK
+              </Button>
+              <Button onClick={cancelDeleteItem} clazz="-normal">
+                Cancel
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <div>
+            <p className="text-center mt-4">
+              通信エラーです
+              <br />
+              しばらく待ってお試しください
+            </p>
+            <div className="flex justify-center mt-4">
+              <Button onClick={cancelDeleteItem} clazz="-OK">
+                OK
+              </Button>
+            </div>
+          </div>
+        )}
       </Modal>
     </div>
   );
