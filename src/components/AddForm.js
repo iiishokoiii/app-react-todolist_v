@@ -6,14 +6,24 @@ import { Button } from './module/Button';
 import { Modal } from './module/Modal';
 import { TextInput } from './module/TextInput';
 import { DB_URL } from '../config';
+import { geteDateStr } from '../utility';
 
 export const AddForm = () => {
   const dispatch = useDispatch();
   const list = useSelector((state) => state.list);
 
   const addItem = (newTitle, newId) => {
-    const newItem = { id: newId, title: newTitle, checked: false };
-    const newList = [...list, newItem];
+    const newItem = {
+      id: newId,
+      title: newTitle,
+      checked: false,
+      date: geteDateStr(),
+    };
+    const newList = [...list, newItem].sort((a, b) => {
+      const dateA = new Date(a.date);
+      const dateB = new Date(b.date);
+      return dateB.getTime() - dateA.getTime();
+    });
     return axios
       .put(`${DB_URL}todo.json`, newList)
       .then((res) => {

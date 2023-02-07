@@ -14,6 +14,7 @@ import { DeleteForm } from './DeleteForm';
 import { Button } from './module/Button';
 import { IconButton } from './module/IconButton';
 import { DB_URL } from '../config';
+import { convertDateStr } from '../utility';
 
 const List = () => {
   const list = useSelector((state) => state.list);
@@ -29,7 +30,14 @@ const List = () => {
   useEffect(() => {
     dispatch(fetchListAction());
     axios.get(`${DB_URL}todo.json`).then((res) => {
-      const _arr = res.data.filter((item) => !!item);
+      console.log(res);
+      const _arr = res.data
+        .filter((item) => !!item)
+        .sort((a, b) => {
+          const dateA = new Date(a.date);
+          const dateB = new Date(b.date);
+          return dateB.getTime() - dateA.getTime();
+        });
       dispatch(fetchListSuccessAction(_arr));
     });
   }, []);
@@ -69,7 +77,10 @@ const List = () => {
                   item.checked,
                 )}`}
               >
-                {item.title}
+                <p>{item.title}</p>
+                <p className="text-gray-400 text-s">
+                  {convertDateStr(item.date)}
+                </p>
               </div>
               <div className="flex w-1/10 items-center">
                 <Button
