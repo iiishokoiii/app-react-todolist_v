@@ -32,20 +32,13 @@ export const DeleteForm = (props) => {
 
   return (
     <div className="deleteForm">
-      <Modal
-        onCloseModal={cancelDeleteItem}
-        title={`'${targetItem.title}’の削除`}
-      >
+      <Modal onCloseModal={cancelDeleteItem} title={`'${targetItem.title}’の削除`}>
         {!fetchErrFlg ? (
           <div>
             <p className="text-sm text-center mt-4">削除しますか？</p>
             <div className="flex justify-center items-start mt-10">
-              <Button onClick={deleteItem} clazz="-primary">
-                OK
-              </Button>
-              <Button onClick={cancelDeleteItem} clazz="-normal">
-                Cancel
-              </Button>
+              <Button onClick={deleteItem} clazz="-primary">OK</Button>
+              <Button onClick={cancelDeleteItem} clazz="-normal">Cancel</Button>
             </div>
           </div>
         ) : (
@@ -56,9 +49,7 @@ export const DeleteForm = (props) => {
               しばらく待ってお試しください
             </p>
             <div className="flex justify-center mt-4">
-              <Button onClick={cancelDeleteItem} clazz="-OK">
-                OK
-              </Button>
+              <Button onClick={cancelDeleteItem} clazz="-OK">OK</Button>
             </div>
           </div>
         )}

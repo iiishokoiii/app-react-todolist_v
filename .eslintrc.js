@@ -16,7 +16,7 @@ module.exports = {
     // 'plugin:import/typescript',
     // 'plugin:@typescript-eslint/eslint-recommended',
     // 'plugin:@typescript-eslint/recommended',
-    'plugin:prettier/recommended',
+    // 'plugin:prettier/recommended',
     'prettier',
     // 'prettier/@typescript-eslint',
     // 'prettier/react',
@@ -49,7 +49,7 @@ module.exports = {
   rules: {
     // eslint official
     'newline-before-return': 'error',
-    'no-console': 'warn',
+    'no-console': 'off',
     'no-continue': 'off',
     'require-yield': 'error',
     // eslint-disable-next-line no-dupe-keys

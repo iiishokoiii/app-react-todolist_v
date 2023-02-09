@@ -19,9 +19,7 @@ export const EditForm = (props) => {
   const dispatch = useDispatch();
   const editItem = (itemTitle) => {
     const newItem = { ...targetItem, title: itemTitle };
-    const newList = list.map((item) => {
-      return item.id === newItem.id ? newItem : item;
-    });
+    const newList = list.map((item) => (item.id === newItem.id ? newItem : item));
     return axios
       .put(`${DB_URL}todo.json`, newList)
       .then((res) => {
@@ -47,10 +45,7 @@ export const EditForm = (props) => {
 
   return (
     <div className="editForm">
-      <Modal
-        onCloseModal={cancelEditItem}
-        title={`'${targetItem.title}'の編集`}
-      >
+      <Modal onCloseModal={cancelEditItem} title={`'${targetItem.title}'の編集`}>
         {!fetchErrFlg ? (
           <div>
             <TextInput
@@ -61,12 +56,8 @@ export const EditForm = (props) => {
               onSubmit={handleEditItem}
             />
             <div className="flex justify-center items-start mt-4">
-              <Button onClick={handleEditItem} clazz="-primary">
-                OK
-              </Button>
-              <Button onClick={cancelEditItem} clazz="-normal">
-                Cancel
-              </Button>
+              <Button onClick={handleEditItem} clazz="-primary">OK</Button>
+              <Button onClick={cancelEditItem} clazz="-normal">Cancel</Button>
             </div>
             {errFlg && <p className="text-center mt-4">入力されていません</p>}
           </div>
@@ -78,9 +69,7 @@ export const EditForm = (props) => {
               しばらく待ってお試しください
             </p>
             <div className="flex justify-center mt-4">
-              <Button onClick={cancelEditItem} clazz="-OK">
-                OK
-              </Button>
+              <Button onClick={cancelEditItem} clazz="-OK">OK</Button>
             </div>
           </div>
         )}

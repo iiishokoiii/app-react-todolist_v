@@ -1,13 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
-import {
-  fetchListAction,
-  fetchListSuccessAction,
-  updateEditFlgAction,
-  updateDeleteFlgAction,
-  updateAddFlgAction,
-} from '../action';
+import { fetchListAction, fetchListSuccessAction, updateEditFlgAction, updateDeleteFlgAction, updateAddFlgAction } from '../action';
 import { AddForm } from './AddForm';
 import { EditForm } from './EditForm';
 import { DeleteForm } from './DeleteForm';
@@ -57,8 +51,7 @@ const List = () => {
     dispatch(updateAddFlgAction(true));
   };
 
-  const setStyle = (checked) =>
-    checked ? 'bg-grey border border-grey-500' : 'bg-white drop-shadow-sm ';
+  const setStyle = (checked) => (checked ? 'bg-grey border border-grey-500' : 'bg-white drop-shadow-sm ');
 
   return (
     <div className="bg-gray-50 relative">
@@ -67,36 +60,22 @@ const List = () => {
       ) : (
         <ul className="mb-4 px-4 py-2">
           {list.map((item) => (
-            <li
-              data-checked={item.checked ? 'true' : 'false'}
-              className="flex my-4 max-w-2xl mx-auto text-sm"
-              key={item.id}
-            >
-              <div
-                className={`px-4 py-2 w-5/6 bg-white font-normal rounded-md ${setStyle(
-                  item.checked,
-                )}`}
-              >
+            <li data-checked={item.checked ? 'true' : 'false'} className="flex my-4 max-w-2xl mx-auto text-sm" key={item.id}>
+              <div className={`px-4 py-2 w-5/6 bg-white font-normal rounded-md ${setStyle(item.checked)}`}>
                 <p>{item.title}</p>
                 <p className="text-gray-400 text-s">
                   {convertDateStr(item.date)}
                 </p>
               </div>
               <div className="flex w-1/10 items-center">
-                <Button
-                  onClick={() => handleEditItem(item.id)}
-                  clazz="-primary"
-                >
+                <Button onClick={() => handleEditItem(item.id)} clazz="-primary">edit</Button>
+                <Button onClick={() => handleDeleteItem(item.id)} clazz="-primary">delete</Button>
+                {/* <IconButton onClick={() => handleEditItem(item.id)} clazz="-edit">
                   edit
-                </Button>
-                <Button
-                  onClick={() => handleDeleteItem(item.id)}
-                  clazz="-primary"
-                >
+                </IconButton> */}
+                {/* <IconButton onClick={() => handleDeleteItem(item.id)} clazz="-delete">
                   delete
-                </Button>
-                {/* <IconButton onClick={() => handleEditItem(i)} clazz='-edit'>edit</IconButton>
-              <IconButton onClick={() => handleDeleteItem(i)} clazz='-delete'>delete</IconButton> */}
+                </IconButton> */}
               </div>
             </li>
           ))}
@@ -107,9 +86,7 @@ const List = () => {
         <AddForm />
       ) : (
         <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2">
-          <IconButton onClick={addItem} clazz="-add">
-            Add
-          </IconButton>
+          <IconButton onClick={addItem} clazz="-add">Add</IconButton>
         </div>
       )}
 

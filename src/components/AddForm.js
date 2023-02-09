@@ -61,12 +61,8 @@ export const AddForm = () => {
           onSubmit={handleAddItem}
         />
         <div className="flex justify-center items-start mt-4">
-          <Button onClick={handleAddItem} clazz="-primary">
-            OK
-          </Button>
-          <Button onClick={cancelAddItem} clazz="-normal">
-            Cancel
-          </Button>
+          <Button onClick={handleAddItem} clazz="-primary">OK</Button>
+          <Button onClick={cancelAddItem} clazz="-normal">Cancel</Button>
         </div>
         {errFlg ? <p className="text-center mt-4">入力されていません</p> : ''}
       </Modal>
