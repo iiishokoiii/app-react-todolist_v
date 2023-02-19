@@ -12,7 +12,7 @@ export const Modal = (props) => {
         <div className="relative px-4 py-2 bg-white rounded-lg shadow">
           <div className="modal-head flex justify-between items-start py-2 rounded-t border-b">
             <h3 className="text-xl font-semibold text-gray-70">{modalTitle}</h3>
-            <button onClick={onCloseModal} className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" type="button">
+            <button onClick={onCloseModal} className="text-gray-400 bg-transparent hover:bg-gray-100 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" type="button">
               <svg aria-hidden="true" className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                 <path
                   fillRule="evenodd"

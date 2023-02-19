@@ -64,7 +64,7 @@ export const AddForm = () => {
           <Button onClick={handleAddItem} clazz="-primary">OK</Button>
           <Button onClick={cancelAddItem} clazz="-normal">Cancel</Button>
         </div>
-        {errFlg ? <p className="text-center mt-4">入力されていません</p> : ''}
+        {errFlg && <p className="text-center mt-4">入力されていません</p>}
       </Modal>
     </div>
   );

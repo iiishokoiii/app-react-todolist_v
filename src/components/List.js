@@ -5,10 +5,9 @@ import { fetchListAction, fetchListSuccessAction, updateEditFlgAction, updateDel
 import { AddForm } from './AddForm';
 import { EditForm } from './EditForm';
 import { DeleteForm } from './DeleteForm';
-import { Button } from './module/Button';
 import { IconButton } from './module/IconButton';
 import { DB_URL } from '../config';
-import { convertDateStr } from '../utility';
+import loading from '../images/loading.gif';
 
 const List = () => {
   const list = useSelector((state) => state.list);
@@ -20,20 +19,29 @@ const List = () => {
 
   const [deleteId, setDeleteId] = useState(null);
   const [editId, setEditId] = useState(null);
+  const [isError, setIsError] = useState(true);
 
   useEffect(() => {
     dispatch(fetchListAction());
-    axios.get(`${DB_URL}todo.json`).then((res) => {
-      console.log(res);
-      const _arr = res.data
-        .filter((item) => !!item)
-        .sort((a, b) => {
-          const dateA = new Date(a.date);
-          const dateB = new Date(b.date);
-          return dateB.getTime() - dateA.getTime();
-        });
-      dispatch(fetchListSuccessAction(_arr));
-    });
+    axios
+      .get(`${DB_URL}todo.json`)
+      .then((res) => {
+        // eslint-disable-next-line no-console
+        console.log(res);
+        const _arr = res.data
+          .filter((item) => !!item)
+          .sort((a, b) => {
+            const dateA = new Date(a.date);
+            const dateB = new Date(b.date);
+            return dateB.getTime() - dateA.getTime();
+          });
+
+        dispatch(fetchListSuccessAction(_arr));
+      })
+      .catch((error) => {
+        console.log(error);
+        setIsError(true);
+      });
   }, []);
 
   const handleEditItem = (id) => {
@@ -51,47 +59,63 @@ const List = () => {
     dispatch(updateAddFlgAction(true));
   };
 
-  const setStyle = (checked) => (checked ? 'bg-grey border border-grey-500' : 'bg-white drop-shadow-sm ');
+  const setStyle = (checked) => (checked ? 'color-grey-200' : 'color-grey-400');
+
 
   return (
-    <div className="bg-gray-50 relative">
+    <div className="relative bg-gray-50 px-4 pt-6 pb-10">
       {isLoading ? (
-        <p>...loading</p>
+        <div className="flex justify-center items-center h-96 flex-col">
+          <p className="mb-3">
+            <img src={loading} alt="Logo" width="48" />
+          </p>
+          <p className="">loading</p>
+        </div>
       ) : (
-        <ul className="mb-4 px-4 py-2">
-          {list.map((item) => (
-            <li data-checked={item.checked ? 'true' : 'false'} className="flex my-4 max-w-2xl mx-auto text-sm" key={item.id}>
-              <div className={`px-4 py-2 w-5/6 bg-white font-normal rounded-md ${setStyle(item.checked)}`}>
-                <p>{item.title}</p>
-                <p className="text-gray-400 text-s">
-                  {convertDateStr(item.date)}
-                </p>
+        <div className="max-w-2xl mx-auto">
+          {isError ? (
+            <div className="flex justify-center items-center h-96 flex-col">
+              <p className="text-center">
+                ただいまデータが取得できません。
+                <br />
+                しばらくたってからお試しください。
+              </p>
               </div>
-              <div className="flex w-1/10 items-center">
-                <Button onClick={() => handleEditItem(item.id)} clazz="-primary">edit</Button>
-                <Button onClick={() => handleDeleteItem(item.id)} clazz="-primary">delete</Button>
-                {/* <IconButton onClick={() => handleEditItem(item.id)} clazz="-edit">
-                  edit
-                </IconButton> */}
-                {/* <IconButton onClick={() => handleDeleteItem(item.id)} clazz="-delete">
-                  delete
-                </IconButton> */}
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
-
-      {addFlg ? (
-        <AddForm />
-      ) : (
-        <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2">
-          <IconButton onClick={addItem} clazz="-add">Add</IconButton>
+          ):( 
+            <>
+              <ul className="">
+                {list.map((item) => (
+                  <li data-checked={item.checked ? 'true' : 'false'} className="flex items-center py-2 mb-1 border-b border-grey-500 text-sm bg-white" key={item.id}>
+                    <div className={`px-4 w-5/6 font-normal ${setStyle(item.checked)}`}>
+                      <p>{item.title}</p>
+                    </div>
+                    <div className="flex w-1/10 items-center">
+                      {/* <Button onClick={() => handleEditItem(item.id)} clazz="-primary">edit</Button>
+                <Button onClick={() => handleDeleteItem(item.id)} clazz="-primary">delete</Button> */}
+                      <IconButton onClick={() => handleEditItem(item.id)} svgname="edit" clazz="-normal">
+                        edit
+                      </IconButton>
+                      <IconButton onClick={() => handleDeleteItem(item.id)} svgname="delete" clazz="-normal">
+                        delete
+                      </IconButton>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+              {!addFlg && (
+                <div className="flex justify-center mt-3">
+                  <IconButton onClick={addItem} svgname="add" clazz="-primary">
+                    Add
+                  </IconButton>
+                </div>
+              )}
+              {addFlg && <AddForm />}
+              {editFlg && <EditForm editId={editId} />}
+              {deleteFlg && <DeleteForm deleteId={deleteId} />}
+            </>
+          )}
         </div>
       )}
-
-      {editFlg ? <EditForm editId={editId} /> : ''}
-      {deleteFlg ? <DeleteForm deleteId={deleteId} /> : ''}
     </div>
   );
 };
