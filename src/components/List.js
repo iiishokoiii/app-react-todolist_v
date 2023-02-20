@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
-import { fetchListAction, fetchListSuccessAction, updateEditFlgAction, updateDeleteFlgAction, updateAddFlgAction } from '../action';
+import { fetchListAction, fetchListSuccessAction, fetchListFailAction, updateEditFlgAction, updateDeleteFlgAction, updateAddFlgAction } from '../action';
 import { AddForm } from './AddForm';
 import { EditForm } from './EditForm';
 import { DeleteForm } from './DeleteForm';
 import { IconButton } from './module/IconButton';
+import { FetchErrorMsg } from './module/FetchErrorMsg';
 import { DB_URL } from '../config';
 import loading from '../images/loading.gif';
 
@@ -19,12 +20,13 @@ const List = () => {
 
   const [deleteId, setDeleteId] = useState(null);
   const [editId, setEditId] = useState(null);
-  const [isError, setIsError] = useState(true);
+  const [fetchErrFlg, setFetchErrFlg] = useState(false);
+  const [fetchTimeoutFlg, setFetchTimeoutFlg] = useState(false);
 
   useEffect(() => {
     dispatch(fetchListAction());
     axios
-      .get(`${DB_URL}todo.json`)
+      .get(`${DB_URL}todo.json`, {timeout: 3000})
       .then((res) => {
         // eslint-disable-next-line no-console
         console.log(res);
@@ -35,12 +37,13 @@ const List = () => {
             const dateB = new Date(b.date);
             return dateB.getTime() - dateA.getTime();
           });
-
         dispatch(fetchListSuccessAction(_arr));
       })
       .catch((error) => {
         console.log(error);
-        setIsError(true);
+        setFetchErrFlg(true);
+        setFetchTimeoutFlg(error.code === 'ECONNABORTED');
+        dispatch(fetchListFailAction());
       });
   }, []);
 
@@ -61,7 +64,6 @@ const List = () => {
 
   const setStyle = (checked) => (checked ? 'color-grey-200' : 'color-grey-400');
 
-
   return (
     <div className="relative bg-gray-50 px-4 pt-6 pb-10">
       {isLoading ? (
@@ -73,15 +75,11 @@ const List = () => {
         </div>
       ) : (
         <div className="max-w-2xl mx-auto">
-          {isError ? (
-            <div className="flex justify-center items-center h-96 flex-col">
-              <p className="text-center">
-                ただいまデータが取得できません。
-                <br />
-                しばらくたってからお試しください。
-              </p>
-              </div>
-          ):( 
+          {fetchErrFlg ? (
+            <div className="flex justify-center items-center h-96 flex-col text-center">
+              <FetchErrorMsg fetchTimeoutFlg={fetchTimeoutFlg}/>
+            </div>
+          ) : (
             <>
               <ul className="">
                 {list.map((item) => (
