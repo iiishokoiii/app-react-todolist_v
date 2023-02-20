@@ -1,6 +1,4 @@
-const zeroPadding = (num, length) => {
-  return (Array(length).join('0') + num).slice(-length);
-};
+const zeroPadding = (num, length) => (Array(length).join('0') + num).slice(-length);
 
 export const geteDateStr = () => {
   const date = new Date();

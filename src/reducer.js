@@ -22,6 +22,12 @@ export default function reducer(state = initialState, action) {
         isLoading: false,
       };
     }
+    case 'FETCH_LIST_FAIL': {
+      return {
+        ...state,
+        isLoading: false,
+      };
+    }
     case 'UPDATE_EDIT_FLG': {
       return {
         ...state,

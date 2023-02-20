@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import reducer from './reducer';
 import './index.scss';
 import App from './App';
+// eslint-disable-next-line import/namespace
 import reportWebVitals from './reportWebVitals';
 
 const store = createStore(reducer);

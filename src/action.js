@@ -5,6 +5,10 @@ export const fetchListSuccessAction = (listArr) => ({
   type: 'FETCH_LIST_SUCCESS',
   payload: listArr,
 });
+export const fetchListFailAction = (flg) => ({
+  type: 'FETCH_LIST_FAIL',
+  payload: flg,
+});
 export const updateEditFlgAction = (flg) => ({
   type: 'UPDATE_EDIT_FLG',
   payload: flg,
